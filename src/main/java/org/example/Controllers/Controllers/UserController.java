@@ -59,7 +59,7 @@ public class UserController {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
-            mailMessage.setFrom("petalexivan@gmail.com");
+            mailMessage.setFrom("set mail here");
             mailMessage.setText("To confirm your account, please click here : "
                     +"http://localhost:8078/confirm?token="+confirmationToken.getConfirmationToken());
             emailSenderService.sendEmail(mailMessage);
