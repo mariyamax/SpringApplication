@@ -1,4 +1,4 @@
-package org.example.Controllers.domain;
+package org.example.Controllers.model;
 
 import lombok.Data;
 
@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -46,12 +45,6 @@ public class Plant {
     public Plant() {
     }
 
-    public Plant(String rose, String holland, String flowers, String s) {
-        this.area=holland;
-        this.description=s;
-        this.name=rose;
-        this.type=flowers;
-    }
     public void addImageToPlant(Image image) {
         image.setPlant(this);
         images.add(image);
