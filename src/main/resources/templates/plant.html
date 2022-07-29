@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+    {{#email}}
+    <form action="/logout" method ="post">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+        <input type="submit" value="Exit">
+    </form><br>
+    <h1>Hello, {{uName}}</h1>
+    <form action="/user/{{email}}" method ="get">
+        <input type="submit" value="go to user Page">
+    </form>
+        {{/email}}
+    {{^email}}
+        <a href="/login">Sing in</a><br>
+        <a href="/registration">Create your account</a>
+    {{/email}}
+    {{#admin}}
+        <a href="/admin">Go to Admin Page</a>
+    {{/admin}}
+
+    {{#plants}}
+    <p>{{name}}</p>
+    <p>{{type}}</p>
+    <a href = "/plant/{{name}}">More</a>
+    {{/plants}}
+    {{#email}}
+        <a href="/market">go to market</a>
+<form action="/plant/info" method="post">
+    Find your plant: <input type="text" name="name"><br>
+    <input type="submit" value="Search"/>
+</form>
+<h3>Create my Plant</h3>
+<form action="/plant/create" method="post" enctype="multipart/form-data">
+    Name: <input type="text" name="name"><br><br>
+    Type: <input type="text" name="type"><br><br>
+    Area of Location: <input type="text" name="area"><br><br>
+    Description: <input type="text" name="description"><br><br>
+    Enter photo: <input type="file" name="file1"/><br><br>
+    Price:<input type="text" name="coast">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+    <input type ="submit" value="Add new plant"/>
+</form>
+{{/email}}
+</body>
+</html>

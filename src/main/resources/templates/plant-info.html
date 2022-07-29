@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+<head>
+    <title></title>
+</head>
+<h4>More info!</h4>
+<div th:if="${plant}">
+<img th:src="@{/images/{id}(id=${plant.previewImageId})}" height="60px"/><br><br>
+<b>Name:<p th:text="${plant.name}"></b><br>
+<b>Type:<p th:text="${plant.type}"></b><br>
+<b>Area:<p th:text="${plant.area}"></p></b><br>
+<b>Description:<p th:text="${description}"></b><br>
+<b>Author: </b><a th:href="@{/user/{email}(email=${user.email})}">go to page</a></form></br>
+<form th:action="@{/plant/delete/{name}(name=${user.name})}" method="post">
+    <input type="hidden" name="_csrf" value="${_csrf.token}">
+    <input type="submit" value="delete plant"/>
+</form>
+</div>
+</body>
+</html>
