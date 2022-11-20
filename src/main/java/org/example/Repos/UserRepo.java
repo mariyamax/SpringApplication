@@ -1,6 +1,6 @@
-package org.example.Controllers.repos;
+package org.example.Repos;
 
-import org.example.Controllers.model.User;
+import org.example.Models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepo extends JpaRepository<User,Long> {

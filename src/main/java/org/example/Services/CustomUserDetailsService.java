@@ -1,7 +1,7 @@
-package org.example.Controllers.Services;
+package org.example.Services;
 
 import lombok.RequiredArgsConstructor;
-import org.example.Controllers.repos.UserRepo;
+import org.example.Repos.UserRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
