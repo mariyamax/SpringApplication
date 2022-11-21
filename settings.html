@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+   <nav>
+        <div>
+            <ul>
+                <li>
+                    <a th:href="@{/userProjects/{id}(id=${user.ID})}">My projects</a>
+                </li>
+                <li>
+                    <a th:href="@{/settings/{id}(id=${user.ID})}">Settings</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</head>
+<body>
+
+<form th:action ="@{/projects}" method="post">
+    <div>
+        <h1>Add project</h1>
+    </div>
+    <div >
+        <input type="text" th:name="name" placeholder="Name"><br>
+    </div>
+    <div>
+        <input type="text" th:name="description" class="form-control" placeholder="Description"><br>
+    </div>
+    <div>
+        <select required th:name="area">
+            <option value="MUSIC">MUSIC</option>
+            <option value="SCIENCE">SCIENCE</option>
+            <option value="DEVELOPMENT">DEVELOPMENT</option>
+        </select>
+    </div>
+    <div>
+        <div >
+            <div><input type="submit" value="CREATE"/></div>
+        </div>
+    </div>
+</form>
+</body>
+</html>

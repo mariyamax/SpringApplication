@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <nav>
+        <ul>
+            <li>
+                <a href="/login">Continue</a>
+            </li>
+        </ul>
+    </nav>
+</head>
+<body>
+
+
+<form th:action="@{/registration}" method="post">
+    <div >
+        <h1>Tut mozhno napisat' chto myi registriruemsya. Only english works</h1>
+    </div>
+
+    <div>
+        <input type="text" th:name="uname"/>
+    </div>
+
+    <div>
+        <input type="email" th:name="email"/>
+    </div>
+
+    <div>
+        <input type="password"  th:name="password"/>
+    </div>
+
+    <div>
+        <!--этот инпут оставить над кнопкой регистрации нужен-->
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+        <input type="submit" value="CREATE"/>
+    </div>
+    <div>
+        <!--кнопка логина ссылка на логин-->
+        <a href="/login">Continue</a>
+    </div>
+</form>
+
+
+</body>
+</html>
