@@ -1,10 +1,9 @@
 package org.example.Services;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Enums.Area;
-import org.example.Enums.Role;
-import org.example.Enums.University;
 import org.example.Models.Project;
 import org.example.Models.User;
 import org.example.Repos.ProjectRepo;
@@ -23,11 +22,10 @@ public class ProjectService {
     if (projectRepository.findByName(name) != null) return false;
     project.setName(name);
     project.setDescription(description);
-    project.getUser().add(user);
     project.getAreas().add(getArea(area));
+    project.getUsers().add(user);
+    project.setAdminId(user.getID());
     projectRepository.save(project);
-    user.getProjects().add(projectRepository.findByName(name));
-    userRepo.save(user);
     return true;
   }
   //todo add utils like area-factory
@@ -39,4 +37,29 @@ public class ProjectService {
       default: return null;
     }
   }
+
+  public Project getProject(Long id) {
+    return projectRepository.findByID(id);
+  }
+
+  public void saveProject(Project project) {
+    projectRepository.save(project);
+  }
+
+  public Project getProject(String projectName) {
+    return projectRepository.findByName(projectName);
+  }
+
+  public List<Project> searchByName(String name){
+    return projectRepository.findAll().stream().filter(project -> project.getName().contains(name)).toList();
+  }
+
+  public List<Project> searchByUserId(Long id) {
+    return projectRepository.findAll().stream().filter(project -> project.getUsers().contains(id)).toList();
+  }
+
+  public List<Project> searchByAdminId(Long id) {
+    return projectRepository.findAll().stream().filter(project -> project.getAdminId()==id).toList();
+  }
+
 }

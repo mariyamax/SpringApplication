@@ -1,6 +1,8 @@
 package org.example.Models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -45,14 +47,17 @@ public class Project {
   @Column(name = "description")
   private String description;
 
+  @ElementCollection(targetClass = User.class, fetch = FetchType.EAGER)
+  @CollectionTable(name = "project_users", joinColumns = @JoinColumn(name = "project_id"))
+  private List<User> users = new ArrayList<>();
+
   @ElementCollection(targetClass = Area.class, fetch = FetchType.EAGER)
   @CollectionTable(name = "project_area", joinColumns = @JoinColumn(name = "project_id"))
   @Enumerated(EnumType.STRING)
   private Set<Area> areas = new HashSet<>();
 
-  @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-  @JoinTable
-  private Set<User> user = new HashSet<>();
+  @Column(name="admin_id")
+  private Long adminId;
 
   @Override
   public boolean equals(Object o) {

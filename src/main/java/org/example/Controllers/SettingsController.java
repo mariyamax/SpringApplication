@@ -19,9 +19,9 @@ public class SettingsController {
   @GetMapping("/settings/{id}")
   public String settings(Principal principal, Model model){
     User user = userService.getByUserMail(principal.getName());
-    Set<Project> projects = user.getProjects();
+    //Set<Project> projects = user.getProjects();
     model.addAttribute("user",user);
-    model.addAttribute("projects",projects);
+    //model.addAttribute("projects",projects);
     return "settings";
   }
 

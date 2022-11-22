@@ -19,7 +19,8 @@ private final UserRepo userRepository;
 
 private final PasswordEncoder passwordEncoder;
 
-    public boolean createUser(User user) {
+
+  public boolean createUser(User user) {
         String email = user.getEmail();
         if (userRepository.findByEmail(email) != null) return false;
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -50,5 +51,9 @@ private final PasswordEncoder passwordEncoder;
 
     public User findByID(Long aLong) {
         return userRepository.findByID(aLong);
+    }
+
+    public User getByName(String name) {
+        return userRepository.findByName(name);
     }
 }

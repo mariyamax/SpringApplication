@@ -42,10 +42,16 @@ public class User implements UserDetails {
     private Long ID;
     @Column(name="email", unique = true)
     private String email;
-    @Column(name="uname")
-    private String uname;
+    @Column(name="name")
+    private String name;
     @Column(name="password", length = 1000)
     private String password;
+    @Column(name="project_member")
+    private boolean isProjectMember;
+    @Column(name="project_admin")
+    private boolean isProjectAdmin;
+
+
     @ElementCollection(targetClass = Role.class, fetch =FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -55,9 +61,6 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_university", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<University> universities = new HashSet<>();
-
-    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user")
-    private Set<Project> projects = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
