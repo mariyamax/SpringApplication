@@ -9,35 +9,43 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li class="nav-item active">
-          <a class="nav-link" href="/">Collection</a>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/userProjects/{id}(id=${user.ID})}">My projects</a>
         </li>
-        <a class="nav-link" href="/registration">Start now</a>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/settings/{id}(id=${user.ID})}">Settings</a>
         </li>
       </ul>
     </div>
   </nav>
 </head>
 <body style="background-image:url('https://www.look.com.ua/large/201209/28702.jpg');background-size:100%;">
-<div class="container">
-  <br><br><br><br><br><br>
-</div>
-<h1 th:text="${project.name}"></h1>
-<p th:text="${project.description}"></p>
-<a th:href = "@{/users/{name}(name=${admin.name})}" class="nav-link"><h1 th:text="Admin"></h1></a>
-<div th:each="user: ${users}">
-  <div class="container">
-    <div class="row">
-      <div class="col-8 text-left">
-        <h1>Members</h1>
-        <a th:href = "@{/users/{name}(name=${user.name})}" class="nav-link"><h1 th:text="${user.name}"></h1></a>
-      </div>
+
+<form th:action ="@{/projects}" method="post" class="form-control" style="max-width: 500px;">
+  <div class="form-outline mb-6">
+    <h1>start now</h1>
+  </div>
+  <div class="form-outline mb-2">
+    <input type="text" th:name="name" class="form-control" placeholder="Name"><br>
+  </div>
+  <div class="form-outline mb-2">
+    <input type="text" th:name="description" class="form-control" placeholder="Description"><br>
+  </div>
+  <div class="form-outline mb-2">
+    <select  class="form-select form-select-lg mb-2" required th:name="area">
+      <option value="MUSIC">MUSIC</option>
+      <option value="SCIENCE">SCIENCE</option>
+      <option value="DEVELOPMENT">DEVELOPMENT</option>
+    </select>
+  </div>
+  <div class="form-outline mb-2"></div>
+  <div class="form-outline mb-2"></div>
+  <div class="row mb-2">
+    <div class="col d-flex justify-content-center">
+      <div><input type="submit" value="CREATE"/></div>
     </div>
   </div>
-</div>
-    </div>
-  </div>
-</div>
+</form>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 </body>
 </html>

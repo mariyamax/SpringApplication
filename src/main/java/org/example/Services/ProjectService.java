@@ -54,8 +54,9 @@ public class ProjectService {
     return projectRepository.findAll().stream().filter(project -> project.getName().contains(name)).toList();
   }
 
-  public List<Project> searchByUserId(Long id) {
-    return projectRepository.findAll().stream().filter(project -> project.getUsers().contains(id)).toList();
+  public List<Project> searchByUserId(User user) {
+    System.out.println("hi from searching by user");
+    return projectRepository.findAll().stream().filter(project -> project.getUsers().contains(user)).toList();
   }
 
   public List<Project> searchByAdminId(Long id) {

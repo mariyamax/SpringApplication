@@ -31,19 +31,20 @@ public class ProjectController {
     return "projectsPages";
   }
 
-  @PostMapping("/projects/{name}")
+  /*@PostMapping("/projects/{name}")
   private String updateProject(@PathVariable("name") String projectName, String userId){
+    //todo how to save project
     Project project = projectService.getProject(projectName);
     Long id = Long.parseLong(userId);
     project.getUsers().add(userService.findByID(Long.parseLong(userId)));
     projectService.saveProject(project);
     return "redirect:/homePage";
-  }
+  }*/
 
  @GetMapping("/projects")
   private String projectsList(Principal principal, Model model){
     User user = userService.getByUserMail(principal.getName());
-    List<Project> projects = projectService.searchByUserId(user.getID());
+    List<Project> projects = projectService.searchByUserId(user);
     if (user.isAdmin()){
     projects.addAll(projectService.searchByAdminId(user.getID()));}
     model.addAttribute("user",user);
@@ -51,8 +52,29 @@ public class ProjectController {
     return "projectsPage";
   }
 
-/*  @GetMapping("/project/{name}")
-  private String projectsByName(@PathVariable String name){
-    //todo фильтрация на выборку проектов по имени
-  }*/
+  @GetMapping("/projects/{name}")
+  private String projectsListByName(@PathVariable String name,Model model, Principal principal){
+    User user = userService.getByUserMail(principal.getName());
+    List<Project> projects = projectService.searchByName(name);
+    model.addAttribute("projects",projects);
+    model.addAttribute("user",user);
+    return "projectsPage";
+  }
+
+  @GetMapping("/project/{id}")
+  private String getProjectProfile(@PathVariable Long id, Model model, Principal principal) {
+    Project project = projectService.getProject(id);
+    List<User> users = project.getUsers();
+    User admin = userService.findByID(project.getAdminId());
+    model.addAttribute("project",project);
+    model.addAttribute("users",users);
+    model.addAttribute("admin",admin);
+    return "projectProfile";
+  }
+
+  @PostMapping("/project/{id}")
+  private String concatUserToProject(@PathVariable Long id, Model model, Principal principal) {
+   //todo how to add user to project
+    return "projectProfile";
+  }
 }

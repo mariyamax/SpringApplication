@@ -1,7 +1,9 @@
 package org.example.Controllers;
 
 import java.security.Principal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.example.Models.Project;
 import org.example.Models.User;
 import org.example.Services.ProjectService;
 import org.example.Services.UserService;
@@ -28,8 +30,16 @@ public class UserController {
   }
 
   @GetMapping("/users/{name}")
-  public String userPage(@PathVariable String name, Model model) {
-    User user = userService.getByName(name);
+  public String userPage(@PathVariable String name, Model model,Principal principal) {
+    User user = userService.getByUserMail(principal.getName());
+    User pageOwner = userService.getByName(name);
+    if(user.getID()== pageOwner.getID()) {
+      model.addAttribute("isOwner",true);
+    } else {
+      model.addAttribute("isOwner",false);
+    }
+    List<Project> usersProject = projectService.searchByUserId(pageOwner);
+    model.addAttribute("projects",usersProject);
     model.addAttribute("user",user);
     return "userPage";
   }
