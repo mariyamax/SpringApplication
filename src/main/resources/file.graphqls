@@ -13,12 +13,15 @@ type Plants {
 }
 
 type Images {
-    ID:ID
+
+    imageURL: String
+
 }
 
 type Query {
 	plants: [Plants!]!
 	plant(name: String): Plants
+    image(imageURL: String): Images
 }
 
 type Mutation {

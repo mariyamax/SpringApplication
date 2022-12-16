@@ -20,16 +20,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomUserDetailService userService;
 
+    /**
+     * use basicAuth for REST
+     * should remove for GraphQL
+     */
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/registration", "/login", "/api/plants")
-                .permitAll()
+                .antMatchers("/graphql","/api/plants").permitAll()
+                /*.authorizeRequests()
+                .antMatchers("/registration", "/login", "/api/plants")*/
+                //.permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic()
                 .and()
-                .csrf().disable().antMatcher("/api/plants")
+                //.csrf().disable().antMatcher("/api/plants")
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()

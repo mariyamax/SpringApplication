@@ -19,11 +19,13 @@ public class Images {
     private String path;
     @Column(name = "size")
     private Long size;
-    @Column(name = "fileExtension")
+    @Column(name = "file_extension")
     private String fileExtension;
     @Column(name = "bytes")
     @Lob
     private byte[] bytes;
+    @Column(name = "image_url")
+    private String imageURL;
 
     public Images() {
     }

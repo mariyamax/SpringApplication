@@ -43,9 +43,9 @@ public class SecurityViewController {
     }
 
     @PostMapping("/login")
-    public String mainPage(Principal principal, Model model) {
-        Users user = service.findByName(principal.getName());
-        service.updateCoins(user);
+    public String mainPage(Users user, Model model) {
+        Users fromDB = service.findByName(user.getUsername());
+        service.updateCoins(fromDB);
         model.addAttribute("user", user);
         model.addAttribute("property", user.getPlants());
         return "userProfile";

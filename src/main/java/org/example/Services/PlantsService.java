@@ -60,6 +60,8 @@ public class PlantsService {
         image.toImageEntity(file);
         imagesRepository.save(image);
         resource.setImageId(image.getID());
+        image.setImageURL("api/images/"+image.getID());
+        imagesRepository.save(image);
     }
 
     public Long save(Plants resource, MultipartFile file1, Users user) {
