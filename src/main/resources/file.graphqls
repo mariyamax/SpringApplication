@@ -7,8 +7,8 @@ type Plants {
      author: String,
      coast: Int,
      description: String,
-     imageId: Long,
-     userId: Long
+     imageId: Int,
+     userId: Int
 
 }
 
@@ -18,9 +18,9 @@ type Images {
 
 type Query {
 	plants: [Plants!]!
-	plant(name: String): Plant
+	plant(name: String): Plants
 }
 
 type Mutation {
-	createPlant(name: String!, userId: Long!, type: String, description: String): Plant
+	createPlant(name: String!, userId: Int!, type: String, description: String): Plants
 }

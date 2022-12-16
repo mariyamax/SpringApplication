@@ -33,8 +33,9 @@ public class Users implements UserDetails {
     private LocalDateTime lastVisitTime;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Plants> plants = new ArrayList<>();
-    @Column(name = "image_id")
-    private Long imageId;
+    @Column(name = "token")
+    private String token;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

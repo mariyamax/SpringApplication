@@ -40,7 +40,7 @@ public class PlantsService {
         return plant.getID();
     }
 
-    public void sellPlant(Users buyer, Users owner, Plants plant) {
+    public Boolean sellPlant(Users buyer, Users owner, Plants plant) {
         if (buyer.getCoins() >= plant.getCoast()) {
             buyer.setCoins(buyer.getCoins() - plant.getCoast());
             owner.setCoins(owner.getCoins() +
@@ -50,7 +50,9 @@ public class PlantsService {
             plant.setUserId(buyer.getID());
             plant.setAuthor(buyer.getUsername());
             plantRepository.save(plant);
+            return true;
         }
+        else return false;
     }
 
     public void addImageToPlant(Plants resource, MultipartFile file) {
@@ -60,8 +62,7 @@ public class PlantsService {
         resource.setImageId(image.getID());
     }
 
-    public Long save(Plants resource, MultipartFile file1, Principal principal) {
-        Users user = usersRepository.findByUsername(principal.getName());
+    public Long save(Plants resource, MultipartFile file1, Users user) {
         resource.setUserId(user.getID());
         resource.setAuthor(user.getUsername());
         addImageToPlant(resource, file1);

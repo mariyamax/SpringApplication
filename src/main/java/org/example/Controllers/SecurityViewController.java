@@ -2,7 +2,6 @@ package org.example.Controllers;
 
 import lombok.AllArgsConstructor;
 import org.example.Models.Users;
-import org.example.RestControllers.UsersController;
 import org.example.Services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +18,7 @@ public class SecurityViewController {
 
     @Autowired
     private UsersService service;
-    @Autowired
-    private UsersController controller;
+
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -33,7 +31,7 @@ public class SecurityViewController {
         user.setCoins(10);
         user.setRegular(1);
         user.setLastVisitTime(LocalDateTime.now());
-        service.save(user);
+        service.create(user);
         model.addAttribute("user", new Users());
         return "redirect:/login";
     }

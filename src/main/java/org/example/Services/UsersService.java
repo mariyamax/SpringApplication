@@ -2,14 +2,13 @@ package org.example.Services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.Models.Images;
 import org.example.Models.Users;
 import org.example.Repositories.ImagesRepository;
 import org.example.Repositories.UsersRepository;
+import org.example.Utils.CustomTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,21 +34,15 @@ public class UsersService {
         return userRepository.findByID(id);
     }
 
-    public Long save(Users resource) {
+    public Long create(Users resource) {
         resource.setPassword(passwordEncoder.encode(resource.getPassword()));
+        resource.setToken(CustomTokenUtils.encodeToToken(resource.getUsername()));
         Users user = userRepository.save(resource);
         return user.getID();
     }
 
     public void update(Users user) {
         userRepository.save(user);
-    }
-
-    public void addImageToUser(Users resource, MultipartFile file) {
-        Images image = new Images();
-        image.toImageEntity(file);
-        imagesRepository.save(image);
-        resource.setImageId(image.getID());
     }
 
     public void updateCoins(Users user) {

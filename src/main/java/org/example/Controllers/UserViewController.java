@@ -23,6 +23,7 @@ public class UserViewController {
     @GetMapping("/{id}")
     public String userInfo(@PathVariable("id") Long id, Model model) {
         Users user = usersService.findById(id);
+        System.out.println("hi");
         model.addAttribute("user", user);
         model.addAttribute("property", user.getPlants());
         return "userProfile";
