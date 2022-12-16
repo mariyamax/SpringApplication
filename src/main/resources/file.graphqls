@@ -1,0 +1,26 @@
+type Plants {
+
+     ID: ID,
+     name: String,
+     type: String,
+     area: String,
+     author: String,
+     coast: Int,
+     description: String,
+     imageId: Long,
+     userId: Long
+
+}
+
+type Images {
+    ID:ID
+}
+
+type Query {
+	plants: [Plants!]!
+	plant(name: String): Plant
+}
+
+type Mutation {
+	createPlant(name: String!, userId: Long!, type: String, description: String): Plant
+}
