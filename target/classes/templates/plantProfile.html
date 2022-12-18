@@ -56,7 +56,7 @@
                         <p>Name</p>
                     </div>
                     <div class="col-2">
-                        <h5 class="mt-0 mb-1" th:text="${plant.type}"></h5>
+                        <h5 class="mt-0 mb-1" th:text="${plant.family}"></h5>
                         <p>Type</p>
                     </div>
                     <div class="col-2">
@@ -64,7 +64,7 @@
                         <p>Area</p>
                     </div>
                     <div class="col-2">
-                        <h5 class="mt-0 mb-1"><a th:href="@{/users/{id}(id=${user.ID})}" class="nav-link">go to page</a>
+                        <h5 class="mt-0 mb-1"><a th:href="@{/users/{id}(id=${user.sid})}" class="nav-link">go to page</a>
                         </h5>
                         <p>Owner</p>
                     </div>

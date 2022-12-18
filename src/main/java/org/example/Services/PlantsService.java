@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -32,12 +31,12 @@ public class PlantsService {
     }
 
     public Plants findById(Long id) {
-        return plantRepository.findByID(id);
+        return plantRepository.findBySid(id);
     }
 
     public Long save(Plants resource) {
         Plants plant = plantRepository.save(resource);
-        return plant.getID();
+        return plant.getSid();
     }
 
     public Boolean sellPlant(Users buyer, Users owner, Plants plant) {
@@ -47,7 +46,7 @@ public class PlantsService {
                     plant.getCoast());
             usersRepository.save(buyer);
             usersRepository.save(owner);
-            plant.setUserId(buyer.getID());
+            plant.setUserId(buyer.getSid());
             plant.setAuthor(buyer.getUsername());
             plantRepository.save(plant);
             return true;
@@ -59,23 +58,21 @@ public class PlantsService {
         Images image = new Images();
         image.toImageEntity(file);
         imagesRepository.save(image);
-        resource.setImageId(image.getID());
-        image.setImageURL("api/images/"+image.getID());
-        imagesRepository.save(image);
+        resource.setImageId(image.getSid());
     }
 
     public Long save(Plants resource, MultipartFile file1, Users user) {
-        resource.setUserId(user.getID());
+        resource.setUserId(user.getSid());
         resource.setAuthor(user.getUsername());
         addImageToPlant(resource, file1);
         plantRepository.save(resource);
         user.getPlants().add(resource);
         usersRepository.save(user);
-        return resource.getID();
+        return resource.getSid();
     }
 
     public void deleteById(Long id) {
-        Plants plantToDelete = plantRepository.findByID(id);
+        Plants plantToDelete = plantRepository.findBySid(id);
         plantRepository.delete(plantToDelete);
     }
 

@@ -1,29 +1,35 @@
 type Plants {
 
-     ID: ID,
-     name: String,
-     type: String,
-     area: String,
-     author: String,
-     coast: Int,
-     description: String,
-     imageId: Int,
-     userId: Int
+    sid: ID,
+    name: String,
+    family: String,
+    area: String,
+    author: String,
+    coast: Int,
+    description: String,
+    imageId: Int,
+    userId: Int
 
 }
 
 type Images {
 
-    imageURL: String
+    sid:ID,
+    path: String,
+    size: Float,
+    fileExtension: String
 
 }
 
 type Query {
-	plants: [Plants!]!
-	plant(name: String): Plants
-    image(imageURL: String): Images
+    plants: [Plants!]!
+    plant(id: ID): Plants
+    image(id: ID): Images
 }
 
+
 type Mutation {
-	createPlant(name: String!, userId: Int!, type: String, description: String): Plants
+    createPlant(name: String!, family: String, area: String, coast: Int, description: String, token:String!): Plants
+    updatePlant(name: String!, family: String, area: String, coast: Int, description: String, token:String!): Plants
+    buyPlant(name: String!, token: String!): Plants
 }

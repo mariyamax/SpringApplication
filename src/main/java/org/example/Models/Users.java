@@ -20,7 +20,7 @@ public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private Long ID;
+    private Long sid;
     @Column(name = "username", nullable = false)
     private String username;
     @Column(name = "password")

@@ -31,14 +31,14 @@ public class UsersService {
     }
 
     public Users findById(Long id) {
-        return userRepository.findByID(id);
+        return userRepository.findBySid(id);
     }
 
     public Long create(Users resource) {
         resource.setPassword(passwordEncoder.encode(resource.getPassword()));
         resource.setToken(CustomTokenUtils.encodeToToken(resource.getUsername()));
         Users user = userRepository.save(resource);
-        return user.getID();
+        return user.getSid();
     }
 
     public void update(Users user) {
@@ -65,7 +65,7 @@ public class UsersService {
     }
 
     public void deleteById(Long id) {
-        Users userToDelete = userRepository.findByID(id);
+        Users userToDelete = userRepository.findBySid(id);
         userRepository.delete(userToDelete);
     }
 

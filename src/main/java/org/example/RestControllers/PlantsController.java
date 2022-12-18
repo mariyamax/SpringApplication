@@ -48,7 +48,7 @@ public class PlantsController {
         Users principal = usersService.findByName(CustomTokenUtils.encodeToUsername(token));
         if (principal != null) {
             service.save(resource, file, principal);
-            return service.findByName(resource.getName()).getID();
+            return service.findByName(resource.getName()).getSid();
         } else {
             return -1L;
         }
@@ -78,7 +78,7 @@ public class PlantsController {
             Plants currentPlant = service.findByName(resource.getName());
             resource = (Plants) PersistenceUtils.partialUpdate(currentPlant, resource);
             service.save(resource);
-            return service.findByName(resource.getName()).getID();
+            return service.findByName(resource.getName()).getSid();
         } else {
             return -1L;
         }

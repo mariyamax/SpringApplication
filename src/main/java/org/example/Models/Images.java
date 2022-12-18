@@ -14,7 +14,7 @@ public class Images {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", nullable = false)
-    private Long ID;
+    private Long sid;
     @Column(name = "path")
     private String path;
     @Column(name = "size")
@@ -24,8 +24,7 @@ public class Images {
     @Column(name = "bytes")
     @Lob
     private byte[] bytes;
-    @Column(name = "image_url")
-    private String imageURL;
+
 
     public Images() {
     }

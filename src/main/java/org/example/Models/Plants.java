@@ -12,11 +12,11 @@ public class Plants {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private Long ID;
+    private Long sid;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "type")
-    private String type;
+    @Column(name = "family")
+    private String family;
     @Column(name = "area")
     private String area;
     @Column(name = "author")

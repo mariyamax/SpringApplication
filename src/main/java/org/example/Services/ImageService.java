@@ -11,7 +11,7 @@ public class ImageService {
     @Autowired
     private ImagesRepository imagesRepository;
 
-    public Images findByURL(String URL) {
-        return imagesRepository.findByImageURL(URL);
+    public Images findBySid(Long id) {
+        return imagesRepository.findBySid(id);
     }
 }

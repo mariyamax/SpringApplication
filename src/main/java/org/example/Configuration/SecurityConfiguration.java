@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 
@@ -25,14 +26,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * should remove for GraphQL
      */
 
-    @Override
+
+    //RestConfigure
+    /*@Override
     protected void configure(HttpSecurity http) throws Exception {
-        http .csrf().disable()
+        http//.csrf().disable();
                 .authorizeRequests()
-                .antMatchers("/graphql","/api/plants").permitAll()
-                /*.authorizeRequests()
-                .antMatchers("/registration", "/login", "/api/plants")*/
-                //.permitAll()
+               // .antMatchers("/graphql","/api/plants").permitAll()
+                //.authorizeRequests()
+                .antMatchers("/registration", "/login", "/api/plants")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic()
                 .and()
@@ -41,7 +44,30 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .permitAll()
                 .and().logout().permitAll();
+    }*/
+    /**
+     * GraphQL Config
+     */
+
+
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers("/graphql").permitAll()
+                .and()
+                .requestCache()
+                .requestCache(new NullRequestCache())
+                .and()
+                .headers()
+                .frameOptions().sameOrigin() // needed for H2 web console
+                .and()
+                .sessionManagement()
+                .maximumSessions(1);
     }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

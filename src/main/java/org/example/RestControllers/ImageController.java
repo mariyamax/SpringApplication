@@ -20,7 +20,7 @@ public class ImageController {
 
     @GetMapping("api/images/{id}")
     private ResponseEntity<?> getImageById(@PathVariable Long id) {
-        Images image = imageRepository.findByID(id);
+        Images image = imageRepository.findBySid(id);
         return ResponseEntity.ok()
                 .contentType(MediaType.valueOf(image.getFileExtension()))
                 .contentLength(image.getSize())
