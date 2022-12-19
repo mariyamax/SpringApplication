@@ -45,25 +45,6 @@ public class UsersService {
         userRepository.save(user);
     }
 
-    public void updateCoins(Users user) {
-        int now = LocalDateTime.now().getDayOfMonth();
-        int lastVisit = user.getLastVisitTime().getDayOfMonth();
-        if (now - lastVisit >= 1) {
-            if (now - lastVisit == 1) {
-                if (user.getRegular() < 7) {
-                    user.setRegular(user.getRegular() + 1);
-                    user.setCoins(user.getCoins() + user.getRegular());
-                } else {
-                    user.setCoins(user.getCoins() + user.getRegular());
-                }
-            } else {
-                user.setRegular(1);
-                user.setCoins(user.getCoins() + 1);
-            }
-            userRepository.save(user);
-        }
-    }
-
     public void deleteById(Long id) {
         Users userToDelete = userRepository.findBySid(id);
         userRepository.delete(userToDelete);

@@ -14,4 +14,5 @@ public class ImageService {
     public Images findBySid(Long id) {
         return imagesRepository.findBySid(id);
     }
+
 }

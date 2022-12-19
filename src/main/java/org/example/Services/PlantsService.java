@@ -64,9 +64,11 @@ public class PlantsService {
     public Long save(Plants resource, MultipartFile file1, Users user) {
         resource.setUserId(user.getSid());
         resource.setAuthor(user.getUsername());
-        addImageToPlant(resource, file1);
+        resource.setUserToken(user.getToken());
+        if (!file1.isEmpty()) {
+            addImageToPlant(resource, file1);
+        }
         plantRepository.save(resource);
-        user.getPlants().add(resource);
         usersRepository.save(user);
         return resource.getSid();
     }

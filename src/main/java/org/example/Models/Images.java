@@ -36,7 +36,6 @@ public class Images {
         try {
             this.setBytes(file.getBytes());
         } catch (IOException e) {
-            //todo write some
             throw new RuntimeException(e);
         }
     }

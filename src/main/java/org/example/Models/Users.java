@@ -27,12 +27,6 @@ public class Users implements UserDetails {
     private String password;
     @Column(name = "coins")
     private Integer coins;
-    @Column(name = "regular_visit")
-    private Integer regular;
-    @Column(name = "last_visit")
-    private LocalDateTime lastVisitTime;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Plants> plants = new ArrayList<>();
     @Column(name = "token")
     private String token;
 

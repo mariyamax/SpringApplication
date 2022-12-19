@@ -41,7 +41,6 @@ public class PlantViewController {
             return "plants";
         }
         model.addAttribute("plant", plant);
-        model.addAttribute("user", usersService.findById(plant.getUserId()));
         return "plantProfile";
     }
 
@@ -53,12 +52,12 @@ public class PlantViewController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(Plants resource, Model model, @RequestParam(name = "file", required = false) MultipartFile file, Principal principal) {
-        Users users = usersService.findByName(principal.getName());
-        //todo check not null
-        plantService.save(resource, file, users);
+    public String create(Plants resource, Model model, @RequestParam(name = "file", required = false) MultipartFile file, String token) {
+        Users user = usersService.findByName(CustomTokenUtils.encodeToUsername(token));
+
+        plantService.save(resource, file, user);
         model.addAttribute("plants", plantService.findAll());
-        return "redirect:/view/plants/main";
+        return "plants";
     }
 
     @RequestMapping(value = "", method = RequestMethod.PATCH)
@@ -75,8 +74,10 @@ public class PlantViewController {
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public String update(Plants resource, @RequestParam(name = "file", required = false) MultipartFile file, Principal principal, Model model) {
+        System.out.println("heyPut");
+        return "redirect:/view/plants/main";
         //check not null
-        Users users = usersService.findByName(principal.getName());
+        /*Users users = usersService.findByName(principal.getName());
         if (!file.isEmpty()) {
             plantService.addImageToPlant(resource, file);
         }
@@ -84,7 +85,7 @@ public class PlantViewController {
         resource = (Plants) PersistenceUtils.partialUpdate(currentPlant, resource);
         plantService.save(resource);
         model.addAttribute("plants", plantService.findAll());
-        return "redirect:/view/plants/main";
+        return "redirect:/view/plants/main";*/
     }
 
 }

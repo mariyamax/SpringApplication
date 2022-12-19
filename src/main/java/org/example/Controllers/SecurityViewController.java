@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import java.time.LocalDateTime;
+
 
 @Controller
 @AllArgsConstructor
@@ -27,8 +27,6 @@ public class SecurityViewController {
     @PostMapping("/registration")
     public String save(Users user, Model model) {
         user.setCoins(10);
-        user.setRegular(1);
-        user.setLastVisitTime(LocalDateTime.now());
         service.create(user);
         model.addAttribute("user", new Users());
         return "redirect:/login";
@@ -43,9 +41,7 @@ public class SecurityViewController {
     @PostMapping("/login")
     public String mainPage(Users user, Model model) {
         Users fromDB = service.findByName(user.getUsername());
-        service.updateCoins(fromDB);
         model.addAttribute("user", user);
-        model.addAttribute("property", user.getPlants());
         return "userProfile";
     }
 

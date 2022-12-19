@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.savedrequest.NullRequestCache;
-import org.springframework.security.web.util.matcher.RequestMatcher;
+
 
 
 @Configuration
@@ -21,51 +21,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomUserDetailService userService;
 
-    /**
-     * use basicAuth for REST
-     * should remove for GraphQL
-     */
-
-
-    //RestConfigure
-    /*@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http//.csrf().disable();
-                .authorizeRequests()
-               // .antMatchers("/graphql","/api/plants").permitAll()
-                //.authorizeRequests()
-                .antMatchers("/registration", "/login", "/api/plants")
-                .permitAll()
-                .anyRequest().authenticated()
-                .and().httpBasic()
-                .and()
-                //.csrf().disable().antMatcher("/api/plants")
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and().logout().permitAll();
-    }*/
-    /**
-     * GraphQL Config
-     */
-
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/graphql").permitAll()
+                /* .authorizeRequests()
+                .antMatchers("/graphql","/registration", "/login", "/api/plants").permitAll()
                 .and()
-                .requestCache()
-                .requestCache(new NullRequestCache())
+                .httpBasic()
                 .and()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .and().logout().permitAll()
+                /*.and()
                 .headers()
-                .frameOptions().sameOrigin() // needed for H2 web console
-                .and()
-                .sessionManagement()
-                .maximumSessions(1);
+                .frameOptions().sameOrigin()*/;
     }
 
 

@@ -40,7 +40,7 @@
     <li class="list-group-item">
         <div class="container overflow-hidden" border="1">
             <div class="row justify-content-center">
-                <form th:action="@{/view/plants}" th:object="${plant}" method="post" class="form-control"
+           <!--     <form th:action="@{/view/plants}" th:object="${plant}" method="post" class="form-control"
                       style="max-width: 500px;" enctype="multipart/form-data">
                     <div class="form-outline mb-6">
                         <h1>Add Plant</h1>
@@ -76,14 +76,14 @@
                             <input type="submit" value="Add new plant"/>
                         </div>
                     </div>
-                </form>
+                </form>-->
             </div>
         </div>
     </li>
     <li class="list-group-item">
         <div class="container overflow-hidden" border="1">
             <div class="row justify-content-center">
-                <form th:action="@{/view/plants}" th:object="${plant}" th:method="put" class="form-control"
+                <form th:action="@{/view/plants}" th:object="${plant}" class="form-control"
                       style="max-width: 500px;" enctype="multipart/form-data">
                     <div class="form-outline mb-6">
                         <h1>Edit Plan</h1>
@@ -114,6 +114,10 @@
                     </div>
 
                     <div class="form-outline mb-2">
+                        <input type="text" th:name="token" class="form-control" placeholder="Token"/>
+                    </div>
+
+                    <div class="form-outline mb-2">
                         <input type="file" th:name="file" class="form-control"/>
                     </div>
 
@@ -121,6 +125,10 @@
                         <div class="col d-flex justify-content-center">
                             <input type="hidden" name="_method" value="put">
                             <input type="submit" value="edit"/>
+                        </div>
+                        <div class="col d-flex justify-content-center">
+                            <input type="hidden" name="_method" value="post">
+                            <input type="submit" value="create"/>
                         </div>
                     </div>
                 </form>

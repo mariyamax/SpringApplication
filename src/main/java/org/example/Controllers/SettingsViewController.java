@@ -25,7 +25,6 @@ public class SettingsViewController {
         Users user = usersService.findByName(principal.getName());
         model.addAttribute("user", user);
         model.addAttribute("plant", new Plants());
-        model.addAttribute("property", user.getPlants());
         return "settings";
     }
 
