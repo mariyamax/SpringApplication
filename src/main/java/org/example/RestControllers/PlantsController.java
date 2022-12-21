@@ -4,7 +4,6 @@ import org.example.Models.Plants;
 import org.example.Models.Users;
 import org.example.Services.PlantsService;
 import org.example.Services.UsersService;
-import org.example.Utils.CustomTokenUtils;
 import org.example.Utils.PersistenceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +23,11 @@ public class PlantsController {
     @GetMapping
     public List<Plants> findAll(String token) {
         List<Plants> plants = service.findAll();
-        Users principal = usersService.findByName(CustomTokenUtils.encodeToUsername(token));
+        Users principal = usersService.findByToken(token);
         if (principal!=null) {
+            for (Plants plant: plants) {
+                plant.setUserToken(null);
+            }
             return plants;
         } else {
             return null;
@@ -34,9 +36,11 @@ public class PlantsController {
 
     @GetMapping(value = "/{id}")
     public Plants findById(@PathVariable("id") Long id, String token) {
-        Users principal = usersService.findByName(CustomTokenUtils.encodeToUsername(token));
+        Users principal = usersService.findByToken(token);
         if (principal!=null) {
-            return service.findById(id);
+            Plants plants = service.findById(id);
+            plants.setUserToken(null);
+            return plants;
         } else {
             return null;
         }
@@ -45,22 +49,21 @@ public class PlantsController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Long create(Plants resource, @RequestParam(name = "file", required = false) MultipartFile file, String token) {
-        Users principal = usersService.findByName(CustomTokenUtils.encodeToUsername(token));
-        if (principal != null) {
-            service.save(resource, file, principal);
-            return service.findByName(resource.getName()).getSid();
-        } else {
+        Users user = usersService.findByToken(token);
+        if (user == null || resource.getCoast() < 0 || service.findByName(resource.getName())!=null) {
             return -1L;
         }
+        service.create(resource, file, user);
+        return service.findByName(resource.getName()).getSid();
     }
 
     @RequestMapping(value = "", method = RequestMethod.PATCH)
     public Boolean sell(@RequestParam(name = "name", required = false) String name, String token) {
         Plants plant = service.findByName(name);
-        Users buyer = usersService.findByName(CustomTokenUtils.encodeToUsername(token));
-        Users owner = usersService.findById(plant.getUserId());
+        Users buyer = usersService.findByToken(token);
         if (plant != null && buyer != null) {
-            return service.sellPlant(buyer, owner, plant);
+            Users owner = usersService.findByToken(plant.getUserToken());
+            return service.sell(buyer, owner, plant);
         } else {
             return false;
         }
@@ -70,31 +73,30 @@ public class PlantsController {
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public Long update(Plants resource, @RequestParam(name = "file", required = false) MultipartFile file, String token) {
-        Users principal = usersService.findByName(CustomTokenUtils.encodeToUsername(token));
-        if (resource != null && principal!=null&&resource.getAuthor().equals(principal.getUsername())) {
-            if (!file.isEmpty()) {
-                service.addImageToPlant(resource, file);
-            }
-            Plants currentPlant = service.findByName(resource.getName());
-            resource = (Plants) PersistenceUtils.partialUpdate(currentPlant, resource);
-            service.save(resource);
-            return service.findByName(resource.getName()).getSid();
-        } else {
+        Users user = usersService.findByToken(token);
+        if (user == null || resource.getCoast() < 0
+                || service.findByName(resource.getName())==null
+                || !service.findByName(resource.getName()).getUserToken().equals(token)) {
             return -1L;
         }
+        if (!file.isEmpty()) {
+            service.addImage(resource, file);
+        }
+        Plants currentPlant = service.findByName(resource.getName());
+        resource = (Plants) PersistenceUtils.partialUpdate(currentPlant, resource);
+        service.save(resource);
+        return service.findByName(resource.getName()).getSid();
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Long delete(@PathVariable("id") Long id, String token) {
-        Users principal = usersService.findByName(CustomTokenUtils.encodeToUsername(token));
-        Plants plants = service.findById(id);
-        if (plants != null && principal!=null&&plants.getAuthor().equals(principal.getUsername())) {
-            service.deleteById(id);
-            return 1L;
-        } else {
-            return -1L;
+    public Boolean delete(@PathVariable("id") Long id, String token) {
+        Users user = usersService.findByToken(token);
+        if (user == null || service.findById(id)==null || service.findById(id).getUserToken()!=token) {
+            return false;
         }
+        service.deleteById(id);
+        return true;
     }
 
 }

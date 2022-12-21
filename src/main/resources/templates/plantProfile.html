@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
 <head>
     <title></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -13,16 +14,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/view/plants/main">Collection</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/users">My Page</a>
+                    <a class="nav-link" href="/plants">Collection</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/settings">Settings</a>
                 </li>
                 <li class="nav-item">
-                    <form th:action="@{/view/plants}" class="form-inline my-2 my-lg-0" method="get">
+                    <a class="nav-link" href="/registration">Start Now</a>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/plants/unique}" class="form-inline my-2 my-lg-0" method="get">
                         <div class="nav-item">
                             <input class="form-control mr-sm-2" type="search" placeholder="Find Plan" th:name="name">
                         </div>
@@ -37,21 +38,17 @@
     <br><br><br>
 </div>
 <div class="container overflow-hidden bg-white text-dark  bg-opacity-50" border="1" th:if="${plant}">
-    <div class="row justify-content-center">
-        <div class="col-6 text-center">
-            <div>
-                <img th:src="@{/images/{id}(id=${plant.imageId})}" height="250"/><br><br>
-            </div>
-        </div>
-    </div>
     <br>
     <div class="container" border="1">
         <ul class="list-unstyled">
             <li class="media">
                 <div class="row">
                     <div class="col-2">
+                        <div>
+                            <img th:src="@{/images/{id}(id=${plant.imageId})}" height="250"/><br><br>
+                        </div>
                     </div>
-                    <div class="col-1">
+                    <div class="col-2">
                         <h5 class="mt-0 mb-1" th:text="${plant.name}"></h5>
                         <p>Name</p>
                     </div>
@@ -63,14 +60,20 @@
                         <h5 class="mt-0 mb-1" th:text="${plant.area}"></h5>
                         <p>Area</p>
                     </div>
-                    <div class="col-2">
-                        <h5 class="mt-0 mb-1"><a th:href="@{/users/{id}(id=${user.sid})}" class="nav-link">go to page</a>
-                        </h5>
-                        <p>Owner</p>
+                    <div class="col-1">
+                        <h5 class="mt-0 mb-1" th:text="${plant.author}"></h5>
+                        <p>Author</p>
+                    </div>
+                    <div class="col-1">
+                        <h5 class="mt-0 mb-1" th:text="${plant.coast}"></h5>
+                        <p>Coast</p>
                     </div>
                     <div class="col-2">
-                        <form th:action="@{/view/plants}" th:method="patch" enctype="multipart/form-data">
-                            <input type="hidden" th:value="${plant.name}" name="name">
+                        <h5 th:if = "${error}" th:text="${error}"/>
+                        <form th:action="@{/plants}" th:method="patch" enctype="multipart/form-data">
+                            <input type="text" th:name="token" class="form-control" placeholder="Token"/>
+                            <input type="hidden" th:value="${plant.name}" th:name="name">
+                            <br>
                             <input type="hidden" name="_method" value="patch">
                             <input type="submit" class="btn btn-light btn-lg" value="Buy This">
                         </form>

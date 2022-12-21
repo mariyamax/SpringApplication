@@ -1,7 +1,6 @@
 package org.example.Models;
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Entity
@@ -27,11 +26,9 @@ public class Plants {
     private String description;
     @Column(name = "image_id")
     private Long imageId;
-    @Column(name = "user_id")
-    private Long userId;
     @Column(name = "user_token")
     private String userToken;
 
-    public Plants() {
-    }
+    public Plants() {}
+
 }

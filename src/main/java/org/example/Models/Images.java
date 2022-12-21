@@ -2,7 +2,6 @@ package org.example.Models;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.*;
 import java.io.IOException;
 
@@ -24,7 +23,6 @@ public class Images {
     @Column(name = "bytes")
     @Lob
     private byte[] bytes;
-
 
     public Images() {
     }

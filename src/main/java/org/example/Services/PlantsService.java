@@ -7,6 +7,7 @@ import org.example.Models.Users;
 import org.example.Repositories.ImagesRepository;
 import org.example.Repositories.PlantsRepository;
 import org.example.Repositories.UsersRepository;
+import org.example.Utils.CustomTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,10 +22,10 @@ public class PlantsService {
     private PlantsRepository plantRepository;
 
     @Autowired
-    private ImagesRepository imagesRepository;
+    private ImagesService imagesService;
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UsersService usersService;
 
     public List<Plants> findAll() {
         return plantRepository.findAll();
@@ -39,37 +40,34 @@ public class PlantsService {
         return plant.getSid();
     }
 
-    public Boolean sellPlant(Users buyer, Users owner, Plants plant) {
+    public Boolean sell(Users buyer, Users owner, Plants plant) {
         if (buyer.getCoins() >= plant.getCoast()) {
             buyer.setCoins(buyer.getCoins() - plant.getCoast());
-            owner.setCoins(owner.getCoins() +
-                    plant.getCoast());
-            usersRepository.save(buyer);
-            usersRepository.save(owner);
-            plant.setUserId(buyer.getSid());
-            plant.setAuthor(buyer.getUsername());
+            owner.setCoins(owner.getCoins() + plant.getCoast());
+            usersService.update(buyer);
+            usersService.update(owner);
+            plant.setUserToken(buyer.getToken());
             plantRepository.save(plant);
             return true;
         }
         else return false;
     }
 
-    public void addImageToPlant(Plants resource, MultipartFile file) {
+    public void addImage(Plants resource, MultipartFile file) {
         Images image = new Images();
         image.toImageEntity(file);
-        imagesRepository.save(image);
+        imagesService.save(image);
         resource.setImageId(image.getSid());
     }
 
-    public Long save(Plants resource, MultipartFile file1, Users user) {
-        resource.setUserId(user.getSid());
-        resource.setAuthor(user.getUsername());
+    public Long create(Plants resource, MultipartFile file1, Users user) {
         resource.setUserToken(user.getToken());
+        resource.setAuthor(CustomTokenUtils.decodeToUsername(user.getToken()));
         if (!file1.isEmpty()) {
-            addImageToPlant(resource, file1);
+            addImage(resource, file1);
         }
         plantRepository.save(resource);
-        usersRepository.save(user);
+        usersService.update(user);
         return resource.getSid();
     }
 
