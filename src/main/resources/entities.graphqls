@@ -8,6 +8,7 @@ type Plants {
     coast: Int,
     description: String,
     imageId: Int,
+    userId: Int
 
 }
 

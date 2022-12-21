@@ -15,7 +15,7 @@ public class Users {
     private Long sid;
     @Column(name = "coins")
     private Integer coins;
-    @Column(name = "token")
-    private String token;
+    @Column(name = "username", unique = true)
+    private String username;
 
 }

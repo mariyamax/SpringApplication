@@ -41,7 +41,7 @@
 <div class="container overflow-hidden" border="1">
     <div class="row justify-content-center">
         <div class="col-6 text-center">
-            <form th:action="@{/start}" method="post" class="form-control"
+            <form th:action="@{/registration}" method="post" class="form-control"
                   style="max-width: 500px;">
                 <div class="form-outline mb-6">
                     <h1>start now</h1>
@@ -52,15 +52,18 @@
                 <div class="form-outline mb-2">
                     <input type="password" th:name="password" placeholder="password" class="form-control"><br>
                 </div>
+                <div class="form-outline mb-2">
+                    <input type="email" th:name="mail" placeholder="mail" class="form-control"><br>
+                </div>
                 <div class="row mb-2">
                     <div class="col d-flex justify-content-center">
                         <div><input type="submit" value="CREATE"/></div>
                     </div>
                 </div>
             </form>
-            <div class="container" th:if="${token}">
-                <h1 th:text="${token}"/>
-            </div>
+        </div>
+        <div class="container" th:if="${token}">
+            <h1 th:text="${token}"/>
         </div>
     </div>
 </div>

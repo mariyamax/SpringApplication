@@ -2,6 +2,7 @@ package org.example.RestControllers;
 
 import org.example.Models.Plants;
 import org.example.Models.Users;
+import org.example.Services.CustomTokenService;
 import org.example.Services.PlantsService;
 import org.example.Services.UsersService;
 import org.example.Utils.PersistenceUtils;
@@ -19,15 +20,14 @@ public class PlantsController {
     private PlantsService service;
     @Autowired
     private UsersService usersService;
+    @Autowired
+    private CustomTokenService tokenService;
 
     @GetMapping
     public List<Plants> findAll(String token) {
         List<Plants> plants = service.findAll();
-        Users principal = usersService.findByToken(token);
+        Users principal = usersService.findByUsername(tokenService.decodeToUsername(token));
         if (principal!=null) {
-            for (Plants plant: plants) {
-                plant.setUserToken(null);
-            }
             return plants;
         } else {
             return null;
@@ -36,10 +36,9 @@ public class PlantsController {
 
     @GetMapping(value = "/{id}")
     public Plants findById(@PathVariable("id") Long id, String token) {
-        Users principal = usersService.findByToken(token);
+        Users principal = usersService.findByUsername(tokenService.decodeToUsername(token));
         if (principal!=null) {
             Plants plants = service.findById(id);
-            plants.setUserToken(null);
             return plants;
         } else {
             return null;
@@ -49,7 +48,7 @@ public class PlantsController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public Long create(Plants resource, @RequestParam(name = "file", required = false) MultipartFile file, String token) {
-        Users user = usersService.findByToken(token);
+        Users user = usersService.findByUsername(tokenService.decodeToUsername(token));
         if (user == null || resource.getCoast() < 0 || service.findByName(resource.getName())!=null) {
             return -1L;
         }
@@ -60,9 +59,9 @@ public class PlantsController {
     @RequestMapping(value = "", method = RequestMethod.PATCH)
     public Boolean sell(@RequestParam(name = "name", required = false) String name, String token) {
         Plants plant = service.findByName(name);
-        Users buyer = usersService.findByToken(token);
+        Users buyer = usersService.findByUsername(tokenService.decodeToUsername(token));
         if (plant != null && buyer != null) {
-            Users owner = usersService.findByToken(plant.getUserToken());
+            Users owner = usersService.findById(plant.getUserId());
             return service.sell(buyer, owner, plant);
         } else {
             return false;
@@ -73,10 +72,10 @@ public class PlantsController {
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public Long update(Plants resource, @RequestParam(name = "file", required = false) MultipartFile file, String token) {
-        Users user = usersService.findByToken(token);
+        Users user = usersService.findByUsername(tokenService.decodeToUsername(token));
         if (user == null || resource.getCoast() < 0
                 || service.findByName(resource.getName())==null
-                || !service.findByName(resource.getName()).getUserToken().equals(token)) {
+                || service.findByName(resource.getName()).getUserId()!=user.getSid()) {
             return -1L;
         }
         if (!file.isEmpty()) {
@@ -91,8 +90,8 @@ public class PlantsController {
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Boolean delete(@PathVariable("id") Long id, String token) {
-        Users user = usersService.findByToken(token);
-        if (user == null || service.findById(id)==null || service.findById(id).getUserToken()!=token) {
+        Users user = usersService.findByUsername(tokenService.decodeToUsername(token));
+        if (user == null || service.findById(id)==null || service.findById(id).getUserId()!=user.getSid()) {
             return false;
         }
         service.deleteById(id);

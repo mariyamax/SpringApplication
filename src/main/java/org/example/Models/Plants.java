@@ -26,8 +26,8 @@ public class Plants {
     private String description;
     @Column(name = "image_id")
     private Long imageId;
-    @Column(name = "user_token")
-    private String userToken;
+    @Column(name = "user_id")
+    private Long userId;
 
     public Plants() {}
 

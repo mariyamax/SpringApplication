@@ -3,6 +3,7 @@ package org.example.Controllers;
 import lombok.AllArgsConstructor;
 import org.example.Models.Plants;
 import org.example.Models.Users;
+import org.example.Services.CustomTokenService;
 import org.example.Services.PlantsService;
 import org.example.Services.UsersService;
 import org.example.Utils.PersistenceUtils;
@@ -23,6 +24,9 @@ public class PlantViewController {
 
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    private CustomTokenService tokenService;
 
     @GetMapping("/unique")
     public String plantSearching(@RequestParam String name, Model model) {
@@ -45,7 +49,8 @@ public class PlantViewController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public String create(Plants resource, Model model, @RequestParam(name = "file", required = false) MultipartFile file, String token) {
-        Users user = usersService.findByToken(token);
+        String username = tokenService.decodeToUsername(token);
+        Users user = usersService.findByUsername(username);
         if (user == null) {
             model.addAttribute("creationError","invalid token");
             model.addAttribute("plant", new Plants());
@@ -69,13 +74,14 @@ public class PlantViewController {
     @RequestMapping(value = "", method = RequestMethod.PATCH)
     public String sell(@RequestParam String name, String token, Model model) {
         Plants plant = plantService.findByName(name);
-        Users buyer = usersService.findByToken(token);
+        String username = tokenService.decodeToUsername(token);
+        Users buyer = usersService.findByUsername(username);
         if (buyer == null) {
             model.addAttribute("plant", plant);
             model.addAttribute("error","invalid token");
             return "plantProfile";
         }
-        Users owner = usersService.findByToken(plant.getUserToken());
+        Users owner = usersService.findById(plant.getUserId());
         if (!plantService.sell(buyer, owner, plant)){
             model.addAttribute("plant", plant);
             model.addAttribute("error","not enough coins");
@@ -88,7 +94,8 @@ public class PlantViewController {
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public String update(Plants resource, @RequestParam(name = "file", required = false) MultipartFile file, String token, Model model) {
-        Users user = usersService.findByToken(token);
+        String username = tokenService.decodeToUsername(token);
+        Users user = usersService.findByUsername(username);
         Plants currentPlant = plantService.findByName(resource.getName());
         if (user == null) {
             model.addAttribute("updateError","invalid token");
@@ -105,7 +112,7 @@ public class PlantViewController {
             model.addAttribute("plant", new Plants());
             return "settings";
         }
-        if (!currentPlant.getUserToken().equals(token)) {
+        if (currentPlant.getUserId()!=user.getSid()) {
             model.addAttribute("updateError","invalid plant to update");
             model.addAttribute("plant", new Plants());
             return "settings";

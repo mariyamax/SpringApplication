@@ -1,7 +1,10 @@
 package org.example.Controllers;
 
 import lombok.AllArgsConstructor;
+import org.example.Models.RefreshTokens;
 import org.example.Models.Users;
+import org.example.Services.CustomEmailService;
+import org.example.Services.CustomTokenService;
 import org.example.Services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SecurityViewController {
 
     @Autowired
-    private UsersService service;
+    private UsersService usersService;
 
+    @Autowired
+    private CustomTokenService tokenService;
 
     @GetMapping("/registration")
     public String registration() {
@@ -24,11 +29,13 @@ public class SecurityViewController {
     }
 
     @PostMapping("/registration")
-    public String save(@RequestParam(name = "login") String login, @RequestParam(name = "password") String password, Model model) {
-        Users users = service.create(login, password);
-        if (users != null) {
-            model.addAttribute("token", users.getToken());
-        }
+    public String save(@RequestParam(name = "login") String login, @RequestParam(name = "password") String password,
+                       @RequestParam(name = "mail") String mail, Model model) {
+        Users users = usersService.create(login);
+        RefreshTokens tokens = tokenService.encodeToRefreshToken(login,password,mail);
+        String accessToken = tokenService.getAccessToken(tokens);
+        model.addAttribute("token", accessToken);
+        System.out.println(accessToken);
         return "registration";
     }
 

@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.Models.Images;
 import org.example.Models.Plants;
 import org.example.Models.Users;
-import org.example.Repositories.ImagesRepository;
 import org.example.Repositories.PlantsRepository;
-import org.example.Repositories.UsersRepository;
-import org.example.Utils.CustomTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +43,7 @@ public class PlantsService {
             owner.setCoins(owner.getCoins() + plant.getCoast());
             usersService.update(buyer);
             usersService.update(owner);
-            plant.setUserToken(buyer.getToken());
+            plant.setUserId(buyer.getSid());
             plantRepository.save(plant);
             return true;
         }
@@ -61,8 +58,8 @@ public class PlantsService {
     }
 
     public Long create(Plants resource, MultipartFile file1, Users user) {
-        resource.setUserToken(user.getToken());
-        resource.setAuthor(CustomTokenUtils.decodeToUsername(user.getToken()));
+        resource.setUserId(user.getSid());
+        resource.setAuthor(user.getUsername());
         if (!file1.isEmpty()) {
             addImage(resource, file1);
         }

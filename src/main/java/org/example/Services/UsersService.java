@@ -5,10 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.Models.Users;
 import org.example.Repositories.ImagesRepository;
 import org.example.Repositories.UsersRepository;
-import org.example.Utils.CustomTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,14 +20,14 @@ public class UsersService {
     @Autowired
     private ImagesRepository imagesRepository;
 
-    public Users create(String login, String password) {
+    public Users create(String login) {
         Users user = new Users();
         user.setCoins(10);
-        user.setToken(CustomTokenUtils.encodeToToken(login, password));
-        if (userRepository.findByToken(user.getToken())!=null) {
-            return null;
+        user.setUsername(login);
+        if (userRepository.findByUsername(login)==null) {
+           return userRepository.save(user);
         } else {
-            return userRepository.save(user);
+            return null;
         }
     }
 
@@ -42,8 +40,11 @@ public class UsersService {
         userRepository.delete(userToDelete);
     }
 
-    public Users findByToken(String token) {
-        return userRepository.findByToken(token);
+    public Users findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
+    public Users findById(Long id) {
+        return userRepository.findBySid(id);
+    }
 }
