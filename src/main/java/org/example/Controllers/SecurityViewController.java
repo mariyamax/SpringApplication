@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SecurityViewController {
 
     @Autowired
+    private CustomEmailService mailService;
+
+    @Autowired
     private UsersService usersService;
 
     @Autowired
@@ -31,11 +34,10 @@ public class SecurityViewController {
     @PostMapping("/registration")
     public String save(@RequestParam(name = "login") String login, @RequestParam(name = "password") String password,
                        @RequestParam(name = "mail") String mail, Model model) {
-        Users users = usersService.create(login);
+        usersService.create(login);
         RefreshTokens tokens = tokenService.encodeToRefreshToken(login,password,mail);
         String accessToken = tokenService.getAccessToken(tokens);
-        model.addAttribute("token", accessToken);
-        System.out.println(accessToken);
+        mailService.sendSimpleEmail(mail,"Token Creation", "Hi from plants application! This is your token "+accessToken);
         return "registration";
     }
 

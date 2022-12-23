@@ -24,6 +24,12 @@ public class CustomTokenService {
         return tokensRepository.save(refreshTokens);
     }
 
+    public RefreshTokens getRefreshToken(String username, String password, String mail) {
+        String credential = username+","+password+":"+mail;
+        String value = SecurityUtils.encode(credential);
+        return tokensRepository.findByValue(value);
+    }
+
     public String decodeToUsername(RefreshTokens token) {
         String credentials = SecurityUtils.decode(token.getValue());
         return credentials.substring(0, credentials.indexOf(','));
